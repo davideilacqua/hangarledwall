@@ -1,678 +1,689 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="it">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2299.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LED Wall - Player</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      height: 100% !important;
+      background-color: #f2f1ed !important;
+    }
+
+    #ledwall-wrapper-container {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 999999 !important;
+      background-color: #f2f1ed !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      font-family: 'Anta', sans-serif !important;
+      font-size: 1.35rem; 
+    }
+
+    #ledwall-wrapper-container .ledwall-grid-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #f2f1ed !important;
+      overflow: hidden;
+      box-sizing: border-box;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+      grid-template-rows: calc(50% - 10px) calc(50% - 10px);
+      gap: 20px;
+      justify-content: space-between;
+      align-content: space-between;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    #ledwall-wrapper-container .ledwall-grid-container.fade-out { opacity: 0; }
+
+    #ledwall-wrapper-container .grid-fullscreen { grid-column: 1 / 3; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-full-height-sx { grid-column: 1; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-full-height-dx { grid-column: 2; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }
+    
+    #ledwall-wrapper-container .grid-half-height-sx-up { grid-column: 1; grid-row: 1; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-half-height-sx-down { grid-column: 1; grid-row: 2; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-half-height-dx-up { grid-column: 2; grid-row: 1; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-half-height-dx-down { grid-column: 2; grid-row: 2; width: 100% !important; height: 100% !important; }
+
+    #ledwall-wrapper-container .grid-half-height-sx { grid-column: 1; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-half-height-dx { grid-column: 2; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-full-lenght-up { grid-column: 1 / 3; grid-row: 1; width: 100% !important; height: 100% !important; }
+    #ledwall-wrapper-container .grid-full-lenght-down { grid-column: 1 / 3; grid-row: 2; width: 100% !important; height: 100% !important; }
+
+    #ledwall-wrapper-container .grid-card-item {
+      position: relative;
+      border-radius: 16px !important;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      box-sizing: border-box;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    #ledwall-wrapper-container .grid-card-item.fade-out { opacity: 0; }
+
+    #ledwall-wrapper-container .preview-content-box {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    #ledwall-wrapper-container .preview-media-box {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 1;
+    }
+
+    /* Stili Widget Meteo */
+    #ledwall-wrapper-container .meteo-light-wrapper {
+      width: 100% !important;
+      max-width: 650px !important;
+      height: auto !important;
+      margin: 0 auto !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 1px solid rgba(226, 232, 240, 0.8) !important;
+      border-radius: 10px !important;
+      padding: 10px 14px !important;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+      color: #1e293b !important;
+      text-align: left !important;
+      box-sizing: border-box !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.85rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+    #ledwall-wrapper-container .meteo-header-bar {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding-bottom: 4px !important;
+      margin-bottom: 4px !important;
+      border-bottom: 1px solid #f1f5f9 !important;
+    }
+    #ledwall-wrapper-container .meteo-main-layout { display: flex !important; gap: 10px !important; align-items: stretch !important; flex-wrap: nowrap !important; }
+    #ledwall-wrapper-container .meteo-today-box {
+      flex: 0 0 130px !important;
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      padding: 8px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      text-align: center !important;
+    }
+    #ledwall-wrapper-container .meteo-today-temp { font-size: 1.3rem !important; font-weight: 700 !important; color: #0f172a !important; line-height: 1 !important; }
+    #ledwall-wrapper-container .meteo-days-grid { flex: 1 !important; display: flex !important; gap: 6px !important; justify-content: space-between !important; }
+    #ledwall-wrapper-container .meteo-small-card {
+      flex: 1 !important;
+      background: #fdfdfd !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 6px !important;
+      padding: 6px 4px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      text-align: center !important;
+    }
+    #ledwall-wrapper-container .meteo-badge-pill {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      font-size: 0.65rem !important; 
+      padding: 2px 4px !important;
+      border-radius: 4px !important;
+      font-weight: 600 !important;
+    }
+
+    /* Stili Widget Corsi */
+    #ledwall-wrapper-container .corsi-ledwall-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      font-family: inherit;
+      color: #1e293b;
+      box-sizing: border-box;
+      text-align: left;
+    }
+    #ledwall-wrapper-container .corsi-ledwall-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      #ledwall-wrapper-container .corsi-ledwall-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    #ledwall-wrapper-container .corso-ledwall-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    #ledwall-wrapper-container .corso-ledwall-tipologia {
+      display: inline-block;
+      background: #fffbe6;
+      color: #946c00;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      border: 1px solid #fde68a;
+      margin-bottom: 8px;
+    }
+    #ledwall-wrapper-container .corso-ledwall-titolo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #0f172a;
+      margin: 0 0 10px 0;
+    }
+    #ledwall-wrapper-container .corso-ledwall-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.95rem;
+      color: #475569;
+      border-top: 1px dashed #f1f5f9;
+      padding-top: 10px;
+    }
+    #ledwall-wrapper-container .info-row-lw { display: flex; align-items: center; gap: 8px; }
+    #ledwall-wrapper-container .tabler-icon-lw { width: 18px; height: 18px; stroke-width: 2.2; stroke: #fcba03; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    #ledwallLoader {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      background-color: rgba(255, 255, 255, 0.5);
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.3s ease;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;div id="ledwall-wrapper-container" style="width: 100%; height: 750px; position: relative; overflow: hidden; border-radius: 12px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>@import url('https://fonts.googleapis.com/css2?family=Anta&amp;display=swap');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #f2f1ed;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Anta', sans-serif !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.35rem;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .ledwall-grid-container {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>top: 0; left: 0; right: 0; bottom: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #f2f1ed !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: calc(50% - 10px) calc(50% - 10px);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>grid-template-rows: calc(50% - 10px) calc(50% - 10px);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: opacity 0.4s ease-in-out;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .ledwall-grid-container.fade-out { opacity: 0; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-fullscreen { grid-column: 1 / 3; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-full-height-sx { grid-column: 1; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-full-height-dx { grid-column: 2; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-half-height-sx-up { grid-column: 1; grid-row: 1; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-half-height-sx-down { grid-column: 1; grid-row: 2; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-half-height-dx-up { grid-column: 2; grid-row: 1; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-half-height-dx-down { grid-column: 2; grid-row: 2; width: 100% !important; height: 100% !important; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-half-height-sx { grid-column: 1; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-half-height-dx { grid-column: 2; grid-row: 1 / 3; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-full-lenght-up { grid-column: 1 / 3; grid-row: 1; width: 100% !important; height: 100% !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-full-lenght-down { grid-column: 1 / 3; grid-row: 2; width: 100% !important; height: 100% !important; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-card-item {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 16px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 8px 24px rgba(0,0,0,0.18);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: opacity 0.4s ease-in-out;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .grid-card-item.fade-out { opacity: 0; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .preview-content-box {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>z-index: 2;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>overflow-y: auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .preview-media-box {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-size: cover;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-position: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>top: 0; left: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>z-index: 1;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>/* Stili Widget Meteo */</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-light-wrapper {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100% !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 650px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: auto !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0 auto !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: rgba(255, 255, 255, 0.95) !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid rgba(226, 232, 240, 0.8) !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 10px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px 14px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #1e293b !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: left !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Inter', sans-serif !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.85rem !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 6px !important;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-header-bar {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding-bottom: 4px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 4px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 1px solid #f1f5f9 !important;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-main-layout { display: flex !important; gap: 10px !important; align-items: stretch !important; flex-wrap: nowrap !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-today-box {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex: 0 0 130px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #f8fafc !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #cbd5e1 !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 8px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center !important;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-today-temp { font-size: 1.3rem !important; font-weight: 700 !important; color: #0f172a !important; line-height: 1 !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-days-grid { flex: 1 !important; display: flex !important; gap: 6px !important; justify-content: space-between !important; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-small-card {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex: 1 !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #fdfdfd !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #e2e8f0 !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 6px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 6px 4px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center !important;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .meteo-badge-pill {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #f1f5f9 !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #475569 !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.65rem !important;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2px 4px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px !important;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600 !important;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>/* Stili Widget Corsi */</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .corsi-ledwall-wrapper {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 1100px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: inherit;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #1e293b;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: left;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .corsi-ledwall-grid {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: repeat(2, 1fr);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>@media (min-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>#ledwall-wrapper-container .corsi-ledwall-grid { grid-template-columns: repeat(3, 1fr); }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .corso-ledwall-card {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #ffffff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #e2e8f0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .corso-ledwall-tipologia {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #fffbe6;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #946c00;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.8rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 4px 10px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #fde68a;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .corso-ledwall-titolo {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.15rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>line-height: 1.25;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #0f172a;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0 0 10px 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .corso-ledwall-info {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.95rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #475569;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-top: 1px dashed #f1f5f9;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding-top: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .info-row-lw { display: flex; align-items: center; gap: 8px; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwall-wrapper-container .tabler-icon-lw { width: 18px; height: 18px; stroke-width: 2.2; stroke: #fcba03; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>#ledwallLoader {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>top: 0; left: 0; width: 100%; height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>backdrop-filter: blur(8px);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>-webkit-backdrop-filter: blur(8px);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: rgba(255, 255, 255, 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>z-index: 99;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: opacity 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="ledwallLoader" class="d-none"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="spinner-border text-dark mb-3" role="status" style="width: 4rem; height: 4rem;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="fw-bold text-dark fs-4"&gt;Caricamento LED Wall in corso...&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="ledwallStage" class="ledwall-grid-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="m-auto text-center p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-dark"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;i class="ti ti-info-circle display-4 mb-3 text-warning"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="fs-3 mb-0"&gt;Avvio sequenza in corso...&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>(function() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>// INCOLLA QUI L'URL DELLA WEB APP DI APPS SCRIPT</p>
-<p class="p1"><span class="Apple-converted-space">      </span>var API_URL = 'https://script.google.com/macros/s/AKfycbzL0QyUQXRurn9EArHWyvZXyUAH7yYBnrMy_eKV-Xf2GpDo8Y5bkEpsHUAdEFR1T_puUw/exec';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>var playlistTotale = [];</p>
-<p class="p1"><span class="Apple-converted-space">      </span>var playlistIndex = 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>var stepTimer = null;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>var zoneTimers = [];</p>
-<p class="p1"><span class="Apple-converted-space">      </span>var globalCorsiData = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>fetchData();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function mostraLoader(mostra) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var loader = document.getElementById("ledwallLoader");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (loader) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (mostra) loader.classList.remove("d-none");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>else loader.classList.add("d-none");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function fetchData() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (API_URL.indexOf("INSERISCI_QUI") !== -1) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>console.error("URL API non configurato.");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>mostraLoader(true);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>fetch(API_URL)</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.then(function(res) { return res.json(); })</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.then(function(data) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>elaboraDatiLedwall(data, true);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>mostraLoader(false);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>})</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.catch(function(err) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>mostraLoader(false);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>console.error("Errore fetch ledwall:", err);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function aggiornaPlaylistSilenziosamente(callback) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (API_URL.indexOf("INSERISCI_QUI") !== -1) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (typeof callback === 'function') callback();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>fetch(API_URL)</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.then(function(res) { return res.json(); })</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.then(function(data) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>elaboraDatiLedwall(data, false);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (typeof callback === 'function') callback();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>})</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.catch(function(err) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>console.error("Errore aggiornamento silenzioso:", err);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (typeof callback === 'function') callback();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function elaboraDatiLedwall(data, avviaSubito) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!data) return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>globalCorsiData = data.corsiTable || [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var haSerie = Array.isArray(data.serieAttive) &amp;&amp; data.serieAttive.length &gt; 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var stage = document.getElementById("ledwallStage");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!haSerie) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (stage) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>stage.innerHTML = '&lt;div class="m-auto text-center text-dark p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center"&gt;&lt;i class="ti ti-alert-triangle display-3 mb-3 text-danger"&gt;&lt;/i&gt;&lt;h3 class="fw-bold mb-2"&gt;Nessuna serie attiva trovata&lt;/h3&gt;&lt;p class="fs-4 mb-0 text-muted"&gt;Crea e attiva almeno una serie nel foglio Google.&lt;/p&gt;&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var nuovaPlaylist = [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>data.serieAttive.forEach(function(ser) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (ser &amp;&amp; ser.sequence) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>ser.sequence.forEach(function(step) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>nuovaPlaylist.push(step);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (nuovaPlaylist.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>playlistTotale = nuovaPlaylist;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (avviaSubito) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderizzaStepCorrente();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function pulisciTimer() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (stepTimer) clearTimeout(stepTimer);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>zoneTimers.forEach(function(t) { clearTimeout(t); });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>zoneTimers = [];</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function getGridClassByLayout(layout) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var l = (layout || "").toLowerCase().trim();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("1/2 height sx - up") !== -1 || l.indexOf("1/2 height sx-up") !== -1) return "grid-half-height-sx-up";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("1/2 height sx - down") !== -1 || l.indexOf("1/2 height sx-down") !== -1) return "grid-half-height-sx-down";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("1/2 height dx - up") !== -1 || l.indexOf("1/2 height dx-up") !== -1) return "grid-half-height-dx-up";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("1/2 height dx - down") !== -1 || l.indexOf("1/2 height dx-down") !== -1) return "grid-half-height-dx-down";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("full-height sx") !== -1 || l.indexOf("full-height left") !== -1 || l.indexOf("sx full height") !== -1) return "grid-full-height-sx";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("full-height dx") !== -1 || l.indexOf("full-height right") !== -1 || l.indexOf("dx full height") !== -1) return "grid-full-height-dx";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("1/2 height sx") !== -1 || l.indexOf("half height sx") !== -1) return "grid-half-height-sx";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("1/2 height dx") !== -1 || l.indexOf("half height dx") !== -1) return "grid-half-height-dx";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("full-lenght up") !== -1 || l.indexOf("full-length up") !== -1 || l === "up") return "grid-full-lenght-up";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (l.indexOf("full-lenght down") !== -1 || l.indexOf("full-length down") !== -1 || l === "down") return "grid-full-lenght-down";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return "grid-fullscreen";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function renderizzaStepCorrente() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var stage = document.getElementById("ledwallStage");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!stage || playlistTotale.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>setTimeout(renderizzaStepCorrente, 2000);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>pulisciTimer();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var currentStep = playlistTotale[playlistIndex % playlistTotale.length];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var schermiDelStep = currentStep.schermi || [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var zoneMap = {};</p>
-<p class="p1"><span class="Apple-converted-space">        </span>schermiDelStep.forEach(function(item) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var gridClass = getGridClassByLayout(item.layout);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (!zoneMap[gridClass]) zoneMap[gridClass] = [];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>zoneMap[gridClass].push(item);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var zoneKeys = Object.keys(zoneMap);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (zoneMap["grid-fullscreen"]) zoneKeys = ["grid-fullscreen"];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>stage.innerHTML = zoneKeys.map(function(gridClass) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return '&lt;div id="zone-' + gridClass + '" class="grid-card-item ' + gridClass + '"&gt;&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}).join("");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var maxDurataStepMs = (Number(currentStep.durata) || 10) * 1000;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>zoneKeys.forEach(function(gridClass) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var listaSchermiZona = zoneMap[gridClass];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var tempoZonaMs = listaSchermiZona.reduce(function(acc, s) { return acc + ((Number(s.tempo) || 10) * 1000); }, 0);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (tempoZonaMs &gt; maxDurataStepMs) maxDurataStepMs = tempoZonaMs;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>avviaRotazioneZona(gridClass, listaSchermiZona, 0);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>pianificaProssimoStep(maxDurataStepMs);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function avviaRotazioneZona(gridClass, listaSchermi, index) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var el = document.getElementById("zone-" + gridClass);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!el || !listaSchermi || !listaSchermi.length) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var item = listaSchermi[index % listaSchermi.length];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>el.innerHTML = "";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>el.style.backgroundColor = item.bg || "#1a1b1e";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (item.media) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var mediaUrl = item.media.trim();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var imgDiv = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>imgDiv.className = "preview-media-box";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>imgDiv.style.backgroundImage = "url(" + JSON.stringify(mediaUrl) + ")";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>el.appendChild(imgDiv);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var tipoSchermo = (item.tipo || "").toLowerCase();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var isMeteo = tipoSchermo.indexOf("meteo") !== -1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var isCorsi = tipoSchermo.indexOf("corsi") !== -1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var textAlign = item.contentAlign || "center";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var contentBox = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>contentBox.className = "preview-content-box";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if ((isMeteo || isCorsi) &amp;&amp; !item.titolo &amp;&amp; !item.sottotitolo &amp;&amp; !item.contenuto) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>contentBox.style.justifyContent = "center";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>contentBox.style.alignItems = "center";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>contentBox.style.textAlign = textAlign;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>contentBox.style.alignItems = textAlign === "left" ? "flex-start" : (textAlign === "right" ? "flex-end" : "center");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var innerWrapper = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>innerWrapper.className = "w-100";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>innerWrapper.style.maxWidth = (isMeteo || isCorsi) ? "1100px" : "95%";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (item.titolo) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var tDiv = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>tDiv.className = "fw-bold mb-2";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>tDiv.style.color = item.titoloColor || "#ffffff";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>tDiv.innerHTML = item.titolo;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>innerWrapper.appendChild(tDiv);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (item.sottotitolo) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var sDiv = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>sDiv.className = "mb-3 fs-4";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>sDiv.style.color = item.sottotitoloColor || "#adb5bd";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>sDiv.innerHTML = item.sottotitolo;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>innerWrapper.appendChild(sDiv);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (item.contenuto) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var cDiv = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>cDiv.className = "fs-4 mb-0";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>cDiv.style.color = item.contenutoColor || "#ffffff";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>cDiv.innerHTML = item.contenuto;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>innerWrapper.appendChild(cDiv);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (isMeteo) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var meteoDiv = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>meteoDiv.id = "meteo-widget-" + gridClass;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>meteoDiv.className = "meteo-light-wrapper";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>meteoDiv.textContent = "Caricamento meteo Frascati...";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>innerWrapper.appendChild(meteoDiv);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (isCorsi) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var corsiDiv = document.createElement("div");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>corsiDiv.id = "corsi-widget-" + gridClass;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>corsiDiv.className = "corsi-ledwall-wrapper";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>corsiDiv.innerHTML = '&lt;div class="text-center text-muted fs-4 py-4"&gt;Caricamento corsi in corso...&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>innerWrapper.appendChild(corsiDiv);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>contentBox.appendChild(innerWrapper);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>el.appendChild(contentBox);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (isMeteo) caricaMeteoDettagliato("meteo-widget-" + gridClass);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (isCorsi) caricaCorsiArrampicata("corsi-widget-" + gridClass, globalCorsiData);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (listaSchermi.length &gt; 1) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var durataItemMs = (Number(item.tempo) || 10) * 1000;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var t = setTimeout(function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>el.classList.add("fade-out");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(function() {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>el.classList.remove("fade-out");</p>
-<p class="p1"><span class="Apple-converted-space">              </span>avviaRotazioneZona(gridClass, listaSchermi, index + 1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, 400);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}, durataItemMs);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>zoneTimers.push(t);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function caricaMeteoDettagliato(containerId) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var lat = 41.8058, lon = 12.6775;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var CACHE_KEY = "meteo_frascati_cache";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var CACHE_TIME_KEY = "meteo_frascati_cache_time";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var TEN_MINUTES = 10 * 60 * 1000;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var cachedData = localStorage.getItem(CACHE_KEY);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var cachedTime = localStorage.getItem(CACHE_TIME_KEY);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var now = new Date().getTime();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (cachedData &amp;&amp; cachedTime &amp;&amp; ((now - Number(cachedTime)) &lt; TEN_MINUTES)) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderizzaWidgetMeteo(JSON.parse(cachedData), containerId);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>} catch(e) {}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>fetch("https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&amp;longitude=" + lon + "&amp;current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day&amp;daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&amp;timezone=auto")</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.then(function(res) { return res.json(); })</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.then(function(data) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (data &amp;&amp; data.daily) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>localStorage.setItem(CACHE_KEY, JSON.stringify(data));</p>
-<p class="p1"><span class="Apple-converted-space">              </span>localStorage.setItem(CACHE_TIME_KEY, now.toString());</p>
-<p class="p1"><span class="Apple-converted-space">              </span>renderizzaWidgetMeteo(data, containerId);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>})</p>
-<p class="p1"><span class="Apple-converted-space">          </span>.catch(function(err) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var container = document.getElementById(containerId);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (container) container.innerHTML = '&lt;span class="fs-5 text-danger"&gt;Impossibile caricare le previsioni&lt;/span&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function renderizzaWidgetMeteo(data, containerId) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var container = document.getElementById(containerId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!container || !data.daily) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var oraAttuale = new Date();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var dataStringa = oraAttuale.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var oraStringa = oraAttuale.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var att = data.current || {};</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var tAttuale = Math.round(att.temperature_2m !== undefined ? att.temperature_2m : data.daily.temperature_2m_max[0]);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var codeAttuale = Number(att.weather_code !== undefined ? att.weather_code : data.daily.weather_code[0]);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var isDay = att.is_day !== undefined ? att.is_day : 1;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var iconaOggi = getSimboloMeteoWMO(codeAttuale);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var descOggi = getDescrizioneMeteoWMO(codeAttuale, isDay);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var giorni = data.daily.time;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var tMax = data.daily.temperature_2m_max;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var tMin = data.daily.temperature_2m_min;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var codes = data.daily.weather_code;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var pioggia = data.daily.precipitation_probability_max;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var giorniNomi = ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var htmlGiorni = "";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (var i = 1; i &lt; Math.min(5, giorni.length); i++) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var d = new Date(giorni[i] + "T12:00:00");</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var nomeG = giorniNomi[d.getDay()];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>var meteoGiorno = getSimboloMeteoWMO(codes[i]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>htmlGiorni +=</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;div class="meteo-small-card"&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span class="fw-bold text-muted" style="font-size:0.65rem;"&gt;' + nomeG + '&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;font-size:3.5rem;line-height:1;color:' + meteoGiorno.colore + ';"&gt;' + meteoGiorno.simbolo + '&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span class="fw-bold text-dark" style="font-size:0.75rem;"&gt;' + Math.round(tMax[i]) + '°&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span style="font-size:0.65rem;color:#94a3b8;"&gt;' + Math.round(tMin[i]) + '°&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span class="meteo-badge-pill"&gt;&lt;i class="ti ti-droplet text-primary"&gt;&lt;/i&gt; ' + (pioggia[i] || 0) + '%&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>container.innerHTML =</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'&lt;div class="meteo-header-bar"&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span class="fw-bold text-dark fs-5"&gt;&lt;i class="ti ti-map-pin text-danger me-1"&gt;&lt;/i&gt;FRASCATI (RM)&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span class="text-muted fs-6 ms-2" style="text-transform:capitalize;"&gt;' + dataStringa + '&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;/div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;span class="badge bg-light text-dark border px-3 py-2 fs-6"&gt;&lt;i class="ti ti-clock me-1 text-muted"&gt;&lt;/i&gt;' + oraStringa + '&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'&lt;/div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'&lt;div class="meteo-main-layout"&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;div class="meteo-today-box"&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;span class="text-uppercase fw-bold text-muted mb-2" style="font-size:0.75rem;letter-spacing:0.5px;"&gt;Oggi in evidenza&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;div class="d-flex align-items-center gap-3 my-2"&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">                </span>'&lt;span style="display:inline-flex;align-items:center;justify-content:center;font-size:2rem;line-height:1;color:' + iconaOggi.colore + ';"&gt;' + iconaOggi.simbolo + '&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">                </span>'&lt;span class="meteo-today-temp"&gt;' + tAttuale + '°C&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;/div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;small class="fw-bold text-secondary text-capitalize fs-5 mb-2"&gt;' + descOggi + '&lt;/small&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;div class="d-flex gap-3 text-muted fs-6"&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">                </span>'&lt;span&gt;&lt;b&gt;Max:&lt;/b&gt; ' + Math.round(tMax[0]) + '°&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">                </span>'&lt;span&gt;&lt;b&gt;Min:&lt;/b&gt; ' + Math.round(tMin[0]) + '°&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">                </span>'&lt;span&gt;&lt;i class="ti ti-droplet text-primary"&gt;&lt;/i&gt; ' + (pioggia[0] || 0) + '%&lt;/span&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">              </span>'&lt;/div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;/div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">            </span>'&lt;div class="meteo-days-grid"&gt;' + htmlGiorni + '&lt;/div&gt;' +</p>
-<p class="p1"><span class="Apple-converted-space">          </span>'&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function getSimboloMeteoWMO(code) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>code = Number(code);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 0) return { simbolo: "☀", colore: "#eab308" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 1 || code === 2) return { simbolo: "🌤", colore: "#64748b" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 3) return { simbolo: "☁", colore: "#64748b" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 45 || code === 48) return { simbolo: "≋", colore: "#64748b" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 51 &amp;&amp; code &lt;= 67) return { simbolo: "🌧", colore: "#2563eb" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 71 &amp;&amp; code &lt;= 77) return { simbolo: "❄", colore: "#0ea5e9" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 80 &amp;&amp; code &lt;= 82) return { simbolo: "🌦", colore: "#2563eb" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 95 &amp;&amp; code &lt;= 99) return { simbolo: "⚡", colore: "#7c3aed" };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return { simbolo: "☁", colore: "#64748b" };</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function getDescrizioneMeteoWMO(code, isDay) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 0 || code === 1) return isDay === 0 ? "Notte Serena" : "Sereno";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 2) return isDay === 0 ? "Notte Poco Nuvolosa" : "Poco Nuvoloso";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code === 3) return "Coperto";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 45 &amp;&amp; code &lt;= 48) return "Nebbia";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 51 &amp;&amp; code &lt;= 67) return "Pioggia";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 71 &amp;&amp; code &lt;= 77) return "Neve";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 80 &amp;&amp; code &lt;= 82) return "Rovesci";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (code &gt;= 95) return "Temporale";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return "Variabile";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function caricaCorsiArrampicata(containerId, corsiDataGlobal) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var container = document.getElementById(containerId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!container) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!corsiDataGlobal || corsiDataGlobal.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>container.innerHTML = '&lt;div class="text-center text-muted fs-4 py-4"&gt;Nessun corso trovato.&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>var html = '&lt;div class="corsi-ledwall-grid"&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>corsiDataGlobal.forEach(function(corso) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>html += `</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="corso-ledwall-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="corso-ledwall-tipologia"&gt;${escapeHtmlCorsi(corso.tipologia)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="corso-ledwall-titolo"&gt;${escapeHtmlCorsz = escapeHtmlCorsi(corso.nome)}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="corso-ledwall-info"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-row-lw"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;svg class="tabler-icon-lw" viewBox="0 0 24 24"&gt;&lt;path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/&gt;&lt;path d="M12 7v5l3 3"/&gt;&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span&gt;&lt;strong&gt;${escapeHtmlCorsi(corso.orario)}&lt;/strong&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-row-lw"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;svg class="tabler-icon-lw" viewBox="0 0 24 24"&gt;&lt;path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/&gt;&lt;path d="M16 3v4"/&gt;&lt;path d="M8 3v4"/&gt;&lt;path d="M4 11h16"/&gt;&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span&gt;Inizio: &lt;strong&gt;${escapeHtmlCorsi(corso.dataInizio)}&lt;/strong&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>html += '&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>container.innerHTML = html;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function escapeHtmlCorsi(str) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!str) return '';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return String(str).replace(/&amp;/g, "&amp;amp;").replace(/&lt;/g, "&amp;lt;").replace(/&gt;/g, "&amp;gt;").replace(/"/g, "&amp;quot;").replace(/'/g, "&amp;#039;");</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function pianificaProssimoStep(durataMs) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (stepTimer) clearTimeout(stepTimer);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>stepTimer = setTimeout(function() {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>playlistIndex++;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (playlistIndex &gt;= playlistTotale.length) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>playlistIndex = 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>aggiornaPlaylistSilenziosamente(function() {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>avviaProssimoStepRotazione();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">          </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>avviaProssimoStepRotazione();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}, durataMs);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function avviaProssimoStepRotazione() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>var stage = document.getElementById("ledwallStage");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (stage) stage.classList.add("fade-out");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setTimeout(function() {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>renderizzaStepCorrente();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (stage) stage.classList.remove("fade-out");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}, 400);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>})();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
+
+  <div id="ledwall-wrapper-container">
+    <div id="ledwallLoader" class="d-none">
+      <div class="spinner-border text-dark mb-3" role="status" style="width: 4rem; height: 4rem;"></div>
+      <span class="fw-bold text-dark fs-4">Caricamento LED Wall in corso...</span>
+    </div>
+    
+    <div id="ledwallStage" class="ledwall-grid-container">
+      <div class="m-auto text-center p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-dark">
+        <i class="ti ti-info-circle display-4 mb-3 text-warning"></i>
+        <p class="fs-3 mb-0">Avvio sequenza in corso...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var API_URL = 'https://script.google.com/macros/s/AKfycbzL0QyUQXRurn9EArHWyvZXyUAH7yYBnrMy_eKV-Xf2GpDo8Y5bkEpsHUAdEFR1T_puUw/exec';
+
+      var playlistTotale = [];
+      var playlistIndex = 0;
+      var stepTimer = null;
+      var zoneTimers = [];
+      var globalCorsiData = [];
+
+      fetchData();
+
+      function mostraLoader(mostra) {
+        var loader = document.getElementById("ledwallLoader");
+        if (loader) {
+          if (mostra) loader.classList.remove("d-none");
+          else loader.classList.add("d-none");
+        }
+      }
+
+      function fetchData() {
+        if (API_URL.indexOf("INSERISCI_QUI") !== -1) {
+          console.error("URL API non configurato.");
+          return;
+        }
+        mostraLoader(true);
+        fetch(API_URL)
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            elaboraDatiLedwall(data, true);
+            mostraLoader(false);
+          })
+          .catch(function(err) {
+            mostraLoader(false);
+            console.error("Errore fetch ledwall:", err);
+          });
+      }
+
+      function aggiornaPlaylistSilenziosamente(callback) {
+        if (API_URL.indexOf("INSERISCI_QUI") !== -1) {
+          if (typeof callback === 'function') callback();
+          return;
+        }
+        fetch(API_URL)
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            elaboraDatiLedwall(data, false);
+            if (typeof callback === 'function') callback();
+          })
+          .catch(function(err) {
+            console.error("Errore aggiornamento silenzioso:", err);
+            if (typeof callback === 'function') callback();
+          });
+      }
+
+      function elaboraDatiLedwall(data, avviaSubito) {
+        if (!data) return;
+        globalCorsiData = data.corsiTable || [];
+        var haSerie = Array.isArray(data.serieAttive) && data.serieAttive.length > 0;
+        var stage = document.getElementById("ledwallStage");
+
+        if (!haSerie) {
+          if (stage) {
+            stage.innerHTML = '<div class="m-auto text-center text-dark p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center"><i class="ti ti-alert-triangle display-3 mb-3 text-danger"></i><h3 class="fw-bold mb-2">Nessuna serie attiva trovata</h3><p class="fs-4 mb-0 text-muted">Crea e attiva almeno una serie nel foglio Google.</p></div>';
+          }
+          return;
+        }
+
+        var nuovaPlaylist = [];
+        data.serieAttive.forEach(function(ser) {
+          if (ser && ser.sequence) {
+            ser.sequence.forEach(function(step) {
+              nuovaPlaylist.push(step);
+            });
+          }
+        });
+
+        if (nuovaPlaylist.length > 0) {
+          playlistTotale = nuevaPlaylist || nuovaPlaylist;
+          if (avviaSubito) {
+            renderizzaStepCorrente();
+          }
+        }
+      }
+
+      function pulisciTimer() {
+        if (stepTimer) clearTimeout(stepTimer);
+        zoneTimers.forEach(function(t) { clearTimeout(t); });
+        zoneTimers = [];
+      }
+
+      function getGridClassByLayout(layout) {
+        var l = (layout || "").toLowerCase().trim();
+        if (l.indexOf("1/2 height sx - up") !== -1 || l.indexOf("1/2 height sx-up") !== -1) return "grid-half-height-sx-up";
+        if (l.indexOf("1/2 height sx - down") !== -1 || l.indexOf("1/2 height sx-down") !== -1) return "grid-half-height-sx-down";
+        if (l.indexOf("1/2 height dx - up") !== -1 || l.indexOf("1/2 height dx-up") !== -1) return "grid-half-height-dx-up";
+        if (l.indexOf("1/2 height dx - down") !== -1 || l.indexOf("1/2 height dx-down") !== -1) return "grid-half-height-dx-down";
+        if (l.indexOf("full-height sx") !== -1 || l.indexOf("full-height left") !== -1 || l.indexOf("sx full height") !== -1) return "grid-full-height-sx";
+        if (l.indexOf("full-height dx") !== -1 || l.indexOf("full-height right") !== -1 || l.indexOf("dx full height") !== -1) return "grid-full-height-dx";
+        if (l.indexOf("1/2 height sx") !== -1 || l.indexOf("half height sx") !== -1) return "grid-half-height-sx";
+        if (l.indexOf("1/2 height dx") !== -1 || l.indexOf("half height dx") !== -1) return "grid-half-height-dx";
+        if (l.indexOf("full-lenght up") !== -1 || l.indexOf("full-length up") !== -1 || l === "up") return "grid-full-lenght-up";
+        if (l.indexOf("full-lenght down") !== -1 || l.indexOf("full-length down") !== -1 || l === "down") return "grid-full-lenght-down";
+        return "grid-fullscreen";
+      }
+
+      function renderizzaStepCorrente() {
+        var stage = document.getElementById("ledwallStage");
+        if (!stage || playlistTotale.length === 0) {
+          setTimeout(renderizzaStepCorrente, 2000);
+          return;
+        }
+
+        pulisciTimer();
+
+        var currentStep = playlistTotale[playlistIndex % playlistTotale.length];
+        var schermiDelStep = currentStep.schermi || [];
+
+        var zoneMap = {};
+        schermiDelStep.forEach(function(item) {
+          var gridClass = getGridClassByLayout(item.layout);
+          if (!zoneMap[gridClass]) zoneMap[gridClass] = [];
+          zoneMap[gridClass].push(item);
+        });
+
+        var zoneKeys = Object.keys(zoneMap);
+        if (zoneMap["grid-fullscreen"]) zoneKeys = ["grid-fullscreen"];
+
+        stage.innerHTML = zoneKeys.map(function(gridClass) {
+          return '<div id="zone-' + gridClass + '" class="grid-card-item ' + gridClass + '"></div>';
+        }).join("");
+
+        var maxDurataStepMs = (Number(currentStep.durata) || 10) * 1000;
+
+        zoneKeys.forEach(function(gridClass) {
+          var listaSchermiZona = zoneMap[gridClass];
+          var tempoZonaMs = listaSchermiZona.reduce(function(acc, s) { return acc + ((Number(s.tempo) || 10) * 1000); }, 0);
+          if (tempoZonaMs > maxDurataStepMs) maxDurataStepMs = tempoZonaMs;
+          avviaRotazioneZona(gridClass, listaSchermiZona, 0);
+        });
+
+        pianificaProssimoStep(maxDurataStepMs);
+      }
+
+      function avviaRotazioneZona(gridClass, listaSchermi, index) {
+        var el = document.getElementById("zone-" + gridClass);
+        if (!el || !listaSchermi || !listaSchermi.length) return;
+
+        var item = listaSchermi[index % listaSchermi.length];
+
+        el.innerHTML = "";
+        el.style.backgroundColor = item.bg || "#1a1b1e";
+
+        if (item.media) {
+          var mediaUrl = item.media.trim();
+          var imgDiv = document.createElement("div");
+          imgDiv.className = "preview-media-box";
+          imgDiv.style.backgroundImage = "url(" + JSON.stringify(mediaUrl) + ")";
+          el.appendChild(imgDiv);
+        }
+
+        var tipoSchermo = (item.tipo || "").toLowerCase();
+        var isMeteo = tipoSchermo.indexOf("meteo") !== -1;
+        var isCorsi = tipoSchermo.indexOf("corsi") !== -1;
+        var textAlign = item.contentAlign || "center";
+
+        var contentBox = document.createElement("div");
+        contentBox.className = "preview-content-box";
+        if ((isMeteo || isCorsi) && !item.titolo && !item.sottotitolo && !item.contenuto) {
+          contentBox.style.justifyContent = "center";
+          contentBox.style.alignItems = "center";
+        } else {
+          contentBox.style.textAlign = textAlign;
+          contentBox.style.alignItems = textAlign === "left" ? "flex-start" : (textAlign === "right" ? "flex-end" : "center");
+        }
+
+        var innerWrapper = document.createElement("div");
+        innerWrapper.className = "w-100";
+        innerWrapper.style.maxWidth = (isMeteo || isCorsi) ? "1100px" : "95%";
+
+        if (item.titolo) {
+          var tDiv = document.createElement("div");
+          tDiv.className = "fw-bold mb-2";
+          tDiv.style.color = item.titoloColor || "#ffffff";
+          tDiv.innerHTML = item.titolo;
+          innerWrapper.appendChild(tDiv);
+        }
+
+        if (item.sottotitolo) {
+          var sDiv = document.createElement("div");
+          sDiv.className = "mb-3 fs-4";
+          sDiv.style.color = item.sottotitoloColor || "#adb5bd";
+          sDiv.innerHTML = item.sottotitolo;
+          innerWrapper.appendChild(sDiv);
+        }
+
+        if (item.contenuto) {
+          var cDiv = document.createElement("div");
+          cDiv.className = "fs-4 mb-0";
+          cDiv.style.color = item.contenutoColor || "#ffffff";
+          cDiv.innerHTML = item.contenuto;
+          innerWrapper.appendChild(cDiv);
+        }
+
+        if (isMeteo) {
+          var meteoDiv = document.createElement("div");
+          meteoDiv.id = "meteo-widget-" + gridClass;
+          meteoDiv.className = "meteo-light-wrapper";
+          meteoDiv.textContent = "Caricamento meteo Frascati...";
+          innerWrapper.appendChild(meteoDiv);
+        }
+
+        if (isCorsi) {
+          var corsiDiv = document.createElement("div");
+          corsiDiv.id = "corsi-widget-" + gridClass;
+          corsiDiv.className = "corsi-ledwall-wrapper";
+          corsiDiv.innerHTML = '<div class="text-center text-muted fs-4 py-4">Caricamento corsi in corso...</div>';
+          innerWrapper.appendChild(corsiDiv);
+        }
+
+        contentBox.appendChild(innerWrapper);
+        el.appendChild(contentBox);
+
+        if (isMeteo) caricaMeteoDettagliato("meteo-widget-" + gridClass);
+        if (isCorsi) caricaCorsiArrampicata("corsi-widget-" + gridClass, globalCorsiData);
+
+        if (listaSchermi.length > 1) {
+          var durataItemMs = (Number(item.tempo) || 10) * 1000;
+          var t = setTimeout(function() {
+            el.classList.add("fade-out");
+            setTimeout(function() {
+              el.classList.remove("fade-out");
+              avviaRotazioneZona(gridClass, listaSchermi, index + 1);
+            }, 400);
+          }, durataItemMs);
+          zoneTimers.push(t);
+        }
+      }
+
+      function caricaMeteoDettagliato(containerId) {
+        var lat = 41.8058, lon = 12.6775;
+        var CACHE_KEY = "meteo_frascati_cache";
+        var CACHE_TIME_KEY = "meteo_frascati_cache_time";
+        var TEN_MINUTES = 10 * 60 * 1000;
+
+        var cachedData = localStorage.getItem(CACHE_KEY);
+        var cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+        var now = new Date().getTime();
+
+        if (cachedData && cachedTime && ((now - Number(cachedTime)) < TEN_MINUTES)) {
+          try {
+            renderizzaWidgetMeteo(JSON.parse(cachedData), containerId);
+            return;
+          } catch(e) {}
+        }
+
+        fetch("https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=auto")
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.daily) {
+              localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+              localStorage.setItem(CACHE_TIME_KEY, now.toString());
+              renderizzaWidgetMeteo(data, containerId);
+            }
+          })
+          .catch(function(err) {
+            var container = document.getElementById(containerId);
+            if (container) container.innerHTML = '<span class="fs-5 text-danger">Impossibile caricare le previsioni</span>';
+          });
+      }
+
+      function renderizzaWidgetMeteo(data, containerId) {
+        var container = document.getElementById(containerId);
+        if (!container || !data.daily) return;
+
+        var oraAttuale = new Date();
+        var dataStringa = oraAttuale.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
+        var oraStringa = oraAttuale.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+
+        var att = data.current || {};
+        var tAttuale = Math.round(att.temperature_2m !== undefined ? att.temperature_2m : data.daily.temperature_2m_max[0]);
+        var codeAttuale = Number(att.weather_code !== undefined ? att.weather_code : data.daily.weather_code[0]);
+        var isDay = att.is_day !== undefined ? att.is_day : 1;
+
+        var iconaOggi = getSimboloMeteoWMO(codeAttuale);
+        var descOggi = getDescrizioneMeteoWMO(codeAttuale, isDay);
+
+        var giorni = data.daily.time;
+        var tMax = data.daily.temperature_2m_max;
+        var tMin = data.daily.temperature_2m_min;
+        var codes = data.daily.weather_code;
+        var pioggia = data.daily.precipitation_probability_max;
+        var giorniNomi = ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"];
+
+        var htmlGiorni = "";
+        for (var i = 1; i < Math.min(5, giorni.length); i++) {
+          var d = new Date(giorni[i] + "T12:00:00");
+          var nomeG = giorniNomi[d.getDay()];
+          var meteoGiorno = getSimboloMeteoWMO(codes[i]);
+
+          htmlGiorni +=
+            '<div class="meteo-small-card">' +
+              '<span class="fw-bold text-muted" style="font-size:0.65rem;">' + nomeG + '</span>' +
+              '<span style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;font-size:3.5rem;line-height:1;color:' + meteoGiorno.colore + ';">' + meteoGiorno.simbolo + '</span>' +
+              '<span class="fw-bold text-dark" style="font-size:0.75rem;">' + Math.round(tMax[i]) + '°</span>' +
+              '<span style="font-size:0.65rem;color:#94a3b8;">' + Math.round(tMin[i]) + '°</span>' +
+              '<span class="meteo-badge-pill"><i class="ti ti-droplet text-primary"></i> ' + (pioggia[i] || 0) + '%</span>' +
+            '</div>';
+        }
+
+        container.innerHTML =
+          '<div class="meteo-header-bar">' +
+            '<div>' +
+              '<span class="fw-bold text-dark fs-5"><i class="ti ti-map-pin text-danger me-1"></i>FRASCATI (RM)</span>' +
+              '<span class="text-muted fs-6 ms-2" style="text-transform:capitalize;">' + dataStringa + '</span>' +
+            '</div>' +
+            '<span class="badge bg-light text-dark border px-3 py-2 fs-6"><i class="ti ti-clock me-1 text-muted"></i>' + oraStringa + '</span>' +
+          '</div>' +
+          '<div class="meteo-main-layout">' +
+            '<div class="meteo-today-box">' +
+              '<span class="text-uppercase fw-bold text-muted mb-2" style="font-size:0.75rem;letter-spacing:0.5px;">Oggi in evidenza</span>' +
+              '<div class="d-flex align-items-center gap-3 my-2">' +
+                '<span style="display:inline-flex;align-items:center;justify-content:center;font-size:2rem;line-height:1;color:' + iconaOggi.colore + ';">' + iconaOggi.simbolo + '</span>' +
+                '<span class="meteo-today-temp">' + tAttuale + '°C</span>' +
+              '</div>' +
+              '<small class="fw-bold text-secondary text-capitalize fs-5 mb-2">' + descOggi + '</small>' +
+              '<div class="d-flex gap-3 text-muted fs-6">' +
+                '<span><b>Max:</b> ' + Math.round(tMax[0]) + '°</span>' +
+                '<span><b>Min:</b> ' + Math.round(tMin[0]) + '°</span>' +
+                '<span><i class="ti ti-droplet text-primary"></i> ' + (pioggia[0] || 0) + '%</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="meteo-days-grid">' + htmlGiorni + '</div>' +
+          '</div>';
+      }
+
+      function getSimboloMeteoWMO(code) {
+        code = Number(code);
+        if (code === 0) return { simbolo: "☀", colore: "#eab308" };
+        if (code === 1 || code === 2) return { simbolo: "🌤", colore: "#64748b" };
+        if (code === 3) return { simbolo: "☁", colore: "#64748b" };
+        if (code === 45 || code === 48) return { simbolo: "≋", colore: "#64748b" };
+        if (code >= 51 && code <= 67) return { simbolo: "🌧", colore: "#2563eb" };
+        if (code >= 71 && code <= 77) return { simbolo: "❄", colore: "#0ea5e9" };
+        if (code >= 80 && code <= 82) return { simbolo: "🌦", colore: "#2563eb" };
+        if (code >= 95 && code <= 99) return { simbolo: "⚡", colore: "#7c3aed" };
+        return { simbolo: "☁", colore: "#64748b" };
+      }
+
+      function getDescrizioneMeteoWMO(code, isDay) {
+        if (code === 0 || code === 1) return isDay === 0 ? "Notte Serena" : "Sereno";
+        if (code === 2) return isDay === 0 ? "Notte Poco Nuvolosa" : "Poco Nuvoloso";
+        if (code === 3) return "Coperto";
+        if (code >= 45 && code <= 48) return "Nebbia";
+        if (code >= 51 && code <= 67) return "Pioggia";
+        if (code >= 71 && code <= 77) return "Neve";
+        if (code >= 80 && code <= 82) return "Rovesci";
+        if (code >= 95) return "Temporale";
+        return "Variabile";
+      }
+
+      function caricaCorsiArrampicata(containerId, corsiDataGlobal) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
+
+        if (!corsiDataGlobal || corsiDataGlobal.length === 0) {
+          container.innerHTML = '<div class="text-center text-muted fs-4 py-4">Nessun corso trovato.</div>';
+          return;
+        }
+
+        var html = '<div class="corsi-ledwall-grid">';
+        corsiDataGlobal.forEach(function(corso) {
+          html += `
+            <div class="corso-ledwall-card">
+              <div>
+                <span class="corso-ledwall-tipologia">${escapeHtmlCorsi(corso.tipologia)}</span>
+                <h3 class="corso-ledwall-titolo">${escapeHtmlCorsi(corso.nome)}</h3>
+              </div>
+              <div class="corso-ledwall-info">
+                <div class="info-row-lw">
+                  <svg class="tabler-icon-lw" viewBox="0 0 24 24"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 7v5l3 3"/></svg>
+                  <span><strong>${escapeHtmlCorsi(corso.orario)}</strong></span>
+                </div>
+                <div class="info-row-lw">
+                  <svg class="tabler-icon-lw" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></svg>
+                  <span>Inizio: <strong>${escapeHtmlCorsi(corso.dataInizio)}</strong></span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+      }
+
+      function escapeHtmlCorsi(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      }
+
+      function pianificaProssimoStep(durataMs) {
+        if (stepTimer) clearTimeout(stepTimer);
+        stepTimer = setTimeout(function() {
+          playlistIndex++;
+          if (playlistIndex >= playlistTotale.length) {
+            playlistIndex = 0;
+            aggiornaPlaylistSilenziosamente(function() {
+              avviaProssimoStepRotazione();
+            });
+          } else {
+            avviaProssimoStepRotazione();
+          }
+        }, durataMs);
+      }
+
+      function avviaProssimoStepRotazione() {
+        var stage = document.getElementById("ledwallStage");
+        if (stage) stage.classList.add("fade-out");
+        setTimeout(function() {
+          renderizzaStepCorrente();
+          if (stage) stage.classList.remove("fade-out");
+        }, 400);
+      }
+    })();
+  </script>
 </body>
 </html>

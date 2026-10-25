@@ -234,7 +234,7 @@
       top: 0; left: 0; width: 100%; height: 100%;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      background-color: #f2f1ed;
+      background-color: rgba(255, 255, 255, 0.5);
       z-index: 99;
       display: flex;
       flex-direction: column;
@@ -247,13 +247,17 @@
 <body>
 
   <div id="ledwall-wrapper-container">
-    <!-- Loader visibile fin da subito all'avvio -->
-    <div id="ledwallLoader">
+    <div id="ledwallLoader" class="d-none">
       <div class="spinner-border text-dark mb-3" role="status" style="width: 4rem; height: 4rem;"></div>
-      <span class="fw-bold text-dark fs-4">Connessione al LED Wall in corso...</span>
+      <span class="fw-bold text-dark fs-4">Caricamento LED Wall in corso...</span>
     </div>
     
-    <div id="ledwallStage" class="ledwall-grid-container"></div>
+    <div id="ledwallStage" class="ledwall-grid-container">
+      <div class="m-auto text-center p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-dark">
+        <i class="ti ti-info-circle display-4 mb-3 text-warning"></i>
+        <p class="fs-3 mb-0">Avvio sequenza in corso...</p>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -271,8 +275,8 @@
       function mostraLoader(mostra) {
         var loader = document.getElementById("ledwallLoader");
         if (loader) {
-          if (mostra) loader.style.display = "flex";
-          else loader.style.display = "none";
+          if (mostra) loader.classList.remove("d-none");
+          else loader.classList.add("d-none");
         }
       }
 

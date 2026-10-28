@@ -661,19 +661,25 @@
       }
 
       function getColoreTipologia(tipologia) {
-        var t = (tipologia || "").toLowerCase().trim();
-        if (t.indexOf("principiant") !== -1 || t.indexOf("base") !== -1) {
-          return { bg: "#e0f2fe", color: "#0369a1", border: "#bae6fd" }; // Azzurro
-        } else if (t.indexOf("avanzat") !== -1 || t.indexOf("pro") !== -1) {
-          return { bg: "#fee2e2", color: "#991b1b", border: "#fecaca" }; // Rosso
-        } else if (t.indexOf("boulder") !== -1) {
-          return { bg: "#f3e8ff", color: "#6b21a8", border: "#e9d5ff" }; // Viola
-        } else if (t.indexOf("lead") !== -1 || t.indexOf("corda") !== -1) {
-          return { bg: "#dcfce7", color: "#166534", border: "#bbf7d0" }; // Verde
-        } else if (t.indexOf("bambin") !== -1 || t.indexOf("junior") !== -1) {
-          return { bg: "#ffedd5", color: "#9a3412", border: "#fed7aa" }; // Arancione
+        var str = (tipologia || "corso").trim();
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash);
         }
-        return { bg: "#fffbe6", color: "#946c00", border: "#fde68a" }; // Default Giallo
+
+        var palettes = [
+          { bg: "#e0f2fe", color: "#0369a1", border: "#bae6fd" }, // Azzurro
+          { bg: "#fee2e2", color: "#991b1b", border: "#fecaca" }, // Rosso/Corallo
+          { bg: "#f3e8ff", color: "#6b21a8", border: "#e9d5ff" }, // Viola
+          { bg: "#dcfce7", color: "#166534", border: "#bbf7d0" }, // Verde
+          { bg: "#ffedd5", color: "#9a3412", border: "#fed7aa" }, // Arancione
+          { bg: "#fce7f3", color: "#9d174d", border: "#fbcfe8" }, // Rosa
+          { bg: "#ccfbf1", color: "#115e59", border: "#99f6e4" }, // Turchese
+          { bg: "#fef9c3", color: "#854d0e", border: "#fef08a" }  // Giallo ambra
+        ];
+
+        var index = Math.abs(hash) % palettes.length;
+        return palettes[index];
       }
 
       function caricaCorsiArrampicata(containerId, corsiDataGlobal) {

@@ -663,20 +663,20 @@
       function getColoreTipologia(tipologia) {
         var str = (tipologia || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-        // 1. Corso Base I livello -> Giallo
-        if (str.indexOf("BASEI") !== -1 || str.indexOf("BASE1") !== -1) {
+        // 1. Corso Base 1 livello -> Giallo
+        if (str.indexOf("BASE1") !== -1) {
           return { bg: "#fef9c3", color: "#854d0e", border: "#fef08a" };
         }
-        // 2. Corso Base II livello -> Arancione
-        if (str.indexOf("BASEII") !== -1 || str.indexOf("BASE2") !== -1) {
+        // 2. Corso Base 2 livello -> Arancione
+        if (str.indexOf("BASE2") !== -1) {
           return { bg: "#ffedd5", color: "#9a3412", border: "#fed7aa" };
         }
-        // 3. Corso sicura I livello -> Verde
-        if (str.indexOf("SICURAI") !== -1 || str.indexOf("SICURA1") !== -1) {
+        // 3. Corso sicura 1 livello -> Verde
+        if (str.indexOf("SICURA1") !== -1) {
           return { bg: "#dcfce7", color: "#166534", border: "#bbf7d0" };
         }
-        // 4. Corso sicura II livello -> Rosso
-        if (str.indexOf("SICURAII") !== -1 || str.indexOf("SICURA2") !== -1) {
+        // 4. Corso sicura 2 livello -> Rosso
+        if (str.indexOf("SICURA2") !== -1) {
           return { bg: "#fee2e2", color: "#991b1b", border: "#fecaca" };
         }
         // 5. Allenamento guidato -> Azzurro

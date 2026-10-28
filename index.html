@@ -31,7 +31,7 @@
       padding: 0 !important;
       box-sizing: border-box !important;
       font-family: 'Anta', sans-serif !important;
-      font-size: 1.35rem; 
+      font-size: 1rem !important; /* Ridotto da 1.35rem a 1rem */
     }
 
     #ledwall-wrapper-container .ledwall-grid-container {
@@ -42,11 +42,11 @@
       background-color: #f2f1ed !important;
       overflow: hidden;
       box-sizing: border-box;
-      padding: 20px;
+      padding: 16px;
       display: grid;
-      grid-template-columns: calc(50% - 10px) calc(50% - 10px);
-      grid-template-rows: calc(50% - 10px) calc(50% - 10px);
-      gap: 20px;
+      grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+      grid-template-rows: calc(50% - 8px) calc(50% - 8px);
+      gap: 16px;
       justify-content: space-between;
       align-content: space-between;
       transition: opacity 0.4s ease-in-out;
@@ -70,12 +70,12 @@
 
     #ledwall-wrapper-container .grid-card-item {
       position: relative;
-      border-radius: 16px !important;
+      border-radius: 12px !important;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
       box-sizing: border-box;
       transition: opacity 0.4s ease-in-out;
     }
@@ -83,7 +83,7 @@
     #ledwall-wrapper-container .grid-card-item.fade-out { opacity: 0; }
 
     #ledwall-wrapper-container .preview-content-box {
-      padding: 30px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -115,55 +115,55 @@
       z-index: 1;
     }
 
-    /* Stili Widget Meteo */
+    /* Stili Widget Meteo - Ridotti e compatti */
     #ledwall-wrapper-container .meteo-light-wrapper {
       width: 100% !important;
-      max-width: 650px !important;
+      max-width: 580px !important;
       height: auto !important;
       margin: 0 auto !important;
       background: rgba(255, 255, 255, 0.95) !important;
       border: 1px solid rgba(226, 232, 240, 0.8) !important;
-      border-radius: 10px !important;
-      padding: 10px 14px !important;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+      border-radius: 8px !important;
+      padding: 8px 12px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
       color: #1e293b !important;
       text-align: left !important;
       box-sizing: border-box !important;
       font-family: 'Inter', sans-serif !important;
-      font-size: 0.85rem !important;
+      font-size: 0.75rem !important;
       display: flex !important;
       flex-direction: column !important;
-      gap: 6px !important;
+      gap: 4px !important;
     }
     #ledwall-wrapper-container .meteo-header-bar {
       display: flex !important;
       justify-content: space-between !important;
       align-items: center !important;
-      padding-bottom: 4px !important;
-      margin-bottom: 4px !important;
+      padding-bottom: 3px !important;
+      margin-bottom: 3px !important;
       border-bottom: 1px solid #f1f5f9 !important;
     }
-    #ledwall-wrapper-container .meteo-main-layout { display: flex !important; gap: 10px !important; align-items: stretch !important; flex-wrap: nowrap !important; }
+    #ledwall-wrapper-container .meteo-main-layout { display: flex !important; gap: 8px !important; align-items: stretch !important; flex-wrap: nowrap !important; }
     #ledwall-wrapper-container .meteo-today-box {
-      flex: 0 0 130px !important;
+      flex: 0 0 110px !important;
       background: #f8fafc !important;
       border: 1px solid #cbd5e1 !important;
-      border-radius: 8px !important;
-      padding: 8px !important;
+      border-radius: 6px !important;
+      padding: 6px !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: space-between !important;
       align-items: center !important;
       text-align: center !important;
     }
-    #ledwall-wrapper-container .meteo-today-temp { font-size: 1.3rem !important; font-weight: 700 !important; color: #0f172a !important; line-height: 1 !important; }
-    #ledwall-wrapper-container .meteo-days-grid { flex: 1 !important; display: flex !important; gap: 6px !important; justify-content: space-between !important; }
+    #ledwall-wrapper-container .meteo-today-temp { font-size: 1.1rem !important; font-weight: 700 !important; color: #0f172a !important; line-height: 1 !important; }
+    #ledwall-wrapper-container .meteo-days-grid { flex: 1 !important; display: flex !important; gap: 4px !important; justify-content: space-between !important; }
     #ledwall-wrapper-container .meteo-small-card {
       flex: 1 !important;
       background: #fdfdfd !important;
       border: 1px solid #e2e8f0 !important;
-      border-radius: 6px !important;
-      padding: 6px 4px !important;
+      border-radius: 5px !important;
+      padding: 4px 2px !important;
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
@@ -173,16 +173,16 @@
     #ledwall-wrapper-container .meteo-badge-pill {
       background: #f1f5f9 !important;
       color: #475569 !important;
-      font-size: 0.65rem !important; 
-      padding: 2px 4px !important;
-      border-radius: 4px !important;
+      font-size: 0.55rem !important; 
+      padding: 1px 3px !important;
+      border-radius: 3px !important;
       font-weight: 600 !important;
     }
 
-    /* Stili Widget Corsi */
+    /* Stili Widget Corsi - Ridotti e compatti */
     #ledwall-wrapper-container .corsi-ledwall-wrapper {
       width: 100%;
-      max-width: 1100px;
+      max-width: 950px;
       margin: 0 auto;
       font-family: inherit;
       color: #1e293b;
@@ -192,7 +192,7 @@
     #ledwall-wrapper-container .corsi-ledwall-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 12px;
     }
     @media (min-width: 768px) {
       #ledwall-wrapper-container .corsi-ledwall-grid { grid-template-columns: repeat(3, 1fr); }
@@ -200,43 +200,43 @@
     #ledwall-wrapper-container .corso-ledwall-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 10px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
     #ledwall-wrapper-container .corso-ledwall-tipologia {
       display: inline-block;
       background: #fffbe6;
       color: #946c00;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 4px;
       text-transform: uppercase;
       border: 1px solid #fde68a;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     #ledwall-wrapper-container .corso-ledwall-titolo {
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      line-height: 1.25;
+      line-height: 1.2;
       color: #0f172a;
-      margin: 0 0 10px 0;
+      margin: 0 0 8px 0;
     }
     #ledwall-wrapper-container .corso-ledwall-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      font-size: 0.95rem;
+      gap: 4px;
+      font-size: 0.8rem;
       color: #475569;
       border-top: 1px dashed #f1f5f9;
-      padding-top: 10px;
+      padding-top: 8px;
     }
-    #ledwall-wrapper-container .info-row-lw { display: flex; align-items: center; gap: 8px; }
-    #ledwall-wrapper-container .tabler-icon-lw { width: 18px; height: 18px; stroke-width: 2.2; stroke: #fcba03; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    #ledwall-wrapper-container .info-row-lw { display: flex; align-items: center; gap: 6px; }
+    #ledwall-wrapper-container .tabler-icon-lw { width: 14px; height: 14px; stroke-width: 2.2; stroke: #fcba03; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
     #ledwallLoader {
       position: absolute;
@@ -257,14 +257,14 @@
 
   <div id="ledwall-wrapper-container">
     <div id="ledwallLoader" class="d-none">
-      <div class="spinner-border text-dark mb-3" role="status" style="width: 4rem; height: 4rem;"></div>
-      <span class="fw-bold text-dark fs-4">Caricamento LED Wall in corso...</span>
+      <div class="spinner-border text-dark mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+      <span class="fw-bold text-dark fs-6">Caricamento LED Wall in corso...</span>
     </div>
     
     <div id="ledwallStage" class="ledwall-grid-container">
-      <div class="m-auto text-center p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-dark">
-        <i class="ti ti-info-circle display-4 mb-3 text-warning"></i>
-        <p class="fs-3 mb-0">Avvio sequenza in corso...</p>
+      <div class="m-auto text-center p-4 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-dark">
+        <i class="ti ti-info-circle fs-1 mb-2 text-warning"></i>
+        <p class="fs-5 mb-0">Avvio sequenza in corso...</p>
       </div>
     </div>
   </div>
@@ -332,7 +332,7 @@
 
         if (!haSerie) {
           if (stage) {
-            stage.innerHTML = '<div class="m-auto text-center text-dark p-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center"><i class="ti ti-alert-triangle display-3 mb-3 text-danger"></i><h3 class="fw-bold mb-2">Nessuna serie attiva trovata</h3><p class="fs-4 mb-0 text-muted">Crea e attiva almeno una serie nel foglio Google.</p></div>';
+            stage.innerHTML = '<div class="m-auto text-center text-dark p-4 w-100 h-100 d-flex flex-column justify-content-center align-items-center"><i class="ti ti-alert-triangle fs-1 mb-2 text-danger"></i><h5 class="fw-bold mb-1">Nessuna serie attiva trovata</h5><p class="fs-6 mb-0 text-muted">Crea e attiva almeno una serie nel foglio Google.</p></div>';
           }
           return;
         }
@@ -461,11 +461,11 @@
 
         var innerWrapper = document.createElement("div");
         innerWrapper.className = "w-100";
-        innerWrapper.style.maxWidth = (isMeteo || isCorsi) ? "1100px" : "95%";
+        innerWrapper.style.maxWidth = (isMeteo || isCorsi) ? "950px" : "90%";
 
         if (item.titolo) {
           var tDiv = document.createElement("div");
-          tDiv.className = "fw-bold mb-2";
+          tDiv.className = "fw-bold mb-1 fs-5";
           tDiv.style.color = item.titoloColor || "#ffffff";
           tDiv.innerHTML = item.titolo;
           innerWrapper.appendChild(tDiv);
@@ -473,7 +473,7 @@
 
         if (item.sottotitolo) {
           var sDiv = document.createElement("div");
-          sDiv.className = "mb-3 fs-4";
+          sDiv.className = "mb-2 fs-6";
           sDiv.style.color = item.sottotitoloColor || "#adb5bd";
           sDiv.innerHTML = item.sottotitolo;
           innerWrapper.appendChild(sDiv);
@@ -481,7 +481,7 @@
 
         if (item.contenuto) {
           var cDiv = document.createElement("div");
-          cDiv.className = "fs-4 mb-0";
+          cDiv.className = "fs-6 mb-0";
           cDiv.style.color = item.contenutoColor || "#ffffff";
           cDiv.innerHTML = item.contenuto;
           innerWrapper.appendChild(cDiv);
@@ -499,7 +499,7 @@
           var corsiDiv = document.createElement("div");
           corsiDiv.id = "corsi-widget-" + gridClass;
           corsiDiv.className = "corsi-ledwall-wrapper";
-          corsiDiv.innerHTML = '<div class="text-center text-muted fs-4 py-4">Caricamento corsi in corso...</div>';
+          corsiDiv.innerHTML = '<div class="text-center text-muted fs-6 py-3">Caricamento corsi in corso...</div>';
           innerWrapper.appendChild(corsiDiv);
         }
 
@@ -550,7 +550,7 @@
           })
           .catch(function(err) {
             var container = document.getElementById(containerId);
-            if (container) container.innerHTML = '<span class="fs-5 text-danger">Impossibile caricare le previsioni</span>';
+            if (container) container.innerHTML = '<span class="fs-6 text-danger">Impossibile caricare le previsioni</span>';
           });
       }
 
@@ -585,10 +585,10 @@
 
           htmlGiorni +=
             '<div class="meteo-small-card">' +
-              '<span class="fw-bold text-muted" style="font-size:0.65rem;">' + nomeG + '</span>' +
-              '<span style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;font-size:3.5rem;line-height:1;color:' + meteoGiorno.colore + ';">' + meteoGiorno.simbolo + '</span>' +
-              '<span class="fw-bold text-dark" style="font-size:0.75rem;">' + Math.round(tMax[i]) + '°</span>' +
-              '<span style="font-size:0.65rem;color:#94a3b8;">' + Math.round(tMin[i]) + '°</span>' +
+              '<span class="fw-bold text-muted" style="font-size:0.55rem;">' + nomeG + '</span>' +
+              '<span style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;font-size:2.2rem;line-height:1;color:' + meteoGiorno.colore + ';">' + meteoGiorno.simbolo + '</span>' +
+              '<span class="fw-bold text-dark" style="font-size:0.65rem;">' + Math.round(tMax[i]) + '°</span>' +
+              '<span style="font-size:0.55rem;color:#94a3b8;">' + Math.round(tMin[i]) + '°</span>' +
               '<span class="meteo-badge-pill"><i class="ti ti-droplet text-primary"></i> ' + (pioggia[i] || 0) + '%</span>' +
             '</div>';
         }
@@ -596,20 +596,20 @@
         container.innerHTML =
           '<div class="meteo-header-bar">' +
             '<div>' +
-              '<span class="fw-bold text-dark fs-5"><i class="ti ti-map-pin text-danger me-1"></i>FRASCATI (RM)</span>' +
-              '<span class="text-muted fs-6 ms-2" style="text-transform:capitalize;">' + dataStringa + '</span>' +
+              '<span class="fw-bold text-dark fs-6"><i class="ti ti-map-pin text-danger me-1"></i>FRASCATI (RM)</span>' +
+              '<span class="text-muted fs-7 ms-2" style="text-transform:capitalize; font-size:0.7rem;">' + dataStringa + '</span>' +
             '</div>' +
-            '<span class="badge bg-light text-dark border px-3 py-2 fs-6"><i class="ti ti-clock me-1 text-muted"></i>' + oraStringa + '</span>' +
+            '<span class="badge bg-light text-dark border px-2 py-1" style="font-size:0.7rem;"><i class="ti ti-clock me-1 text-muted"></i>' + oraStringa + '</span>' +
           '</div>' +
           '<div class="meteo-main-layout">' +
             '<div class="meteo-today-box">' +
-              '<span class="text-uppercase fw-bold text-muted mb-2" style="font-size:0.75rem;letter-spacing:0.5px;">Oggi in evidenza</span>' +
-              '<div class="d-flex align-items-center gap-3 my-2">' +
-                '<span style="display:inline-flex;align-items:center;justify-content:center;font-size:2rem;line-height:1;color:' + iconaOggi.colore + ';">' + iconaOggi.simbolo + '</span>' +
+              '<span class="text-uppercase fw-bold text-muted mb-1" style="font-size:0.6rem;letter-spacing:0.5px;">Oggi in evidenza</span>' +
+              '<div class="d-flex align-items-center gap-2 my-1">' +
+                '<span style="display:inline-flex;align-items:center;justify-content:center;font-size:1.6rem;line-height:1;color:' + iconaOggi.colore + ';">' + iconaOggi.simbolo + '</span>' +
                 '<span class="meteo-today-temp">' + tAttuale + '°C</span>' +
               '</div>' +
-              '<small class="fw-bold text-secondary text-capitalize fs-5 mb-2">' + descOggi + '</small>' +
-              '<div class="d-flex gap-3 text-muted fs-6">' +
+              '<small class="fw-bold text-secondary text-capitalize" style="font-size:0.7rem; margin-bottom:4px;">' + descOggi + '</small>' +
+              '<div class="d-flex gap-2 text-muted" style="font-size:0.65rem;">' +
                 '<span><b>Max:</b> ' + Math.round(tMax[0]) + '°</span>' +
                 '<span><b>Min:</b> ' + Math.round(tMin[0]) + '°</span>' +
                 '<span><i class="ti ti-droplet text-primary"></i> ' + (pioggia[0] || 0) + '%</span>' +
@@ -649,7 +649,7 @@
         if (!container) return;
 
         if (!corsiDataGlobal || corsiDataGlobal.length === 0) {
-          container.innerHTML = '<div class="text-center text-muted fs-4 py-4">Nessun corso trovato.</div>';
+          container.innerHTML = '<div class="text-center text-muted fs-6 py-3">Nessun corso trovato.</div>';
           return;
         }
 
@@ -693,9 +693,13 @@
               avviaProssimoStepRotazione();
             });
           } else {
-            avviaProssimoStepRotazione();
+            avviaProssimoClassico(); // mantenuto il flusso originale
           }
         }, durataMs);
+      }
+
+      function avviaProssimoClassico() {
+        avviaProssimoStepRotazione();
       }
 
       function avviaProssimoStepRotazione() {

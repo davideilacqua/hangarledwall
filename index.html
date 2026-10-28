@@ -661,7 +661,9 @@
       }
 
       function getColoreTipologia(tipologia) {
-        var str = (tipologia || "corso").trim();
+        var str = (tipologia || "").trim().toLowerCase();
+        if (!str) return { bg: "#fffbe6", color: "#946c00", border: "#fde68a" };
+
         var hash = 0;
         for (var i = 0; i < str.length; i++) {
           hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -693,21 +695,24 @@
 
         var html = '<div class="corsi-ledwall-grid">';
         corsiDataGlobal.forEach(function(corso) {
-          var stileBadge = getColoreTipologia(corso.tipologia);
+          // Controlla varianti possibili della chiave della proprietà proveniente da Google Apps Script
+          var tipologiaTesto = corso.tipologia || corso.Tipologia || corso.tipo || corso.Tipo || corso.categoria || "";
+          var stileBadge = getColoreTipologia(tipologiaTesto);
+
           html += `
             <div class="corso-ledwall-card">
               <div>
-                <span class="corso-ledwall-tipologia" style="background: ${stileBadge.bg}; color: ${stileBadge.color}; border: 1px solid ${stileBadge.border};">${escapeHtmlCorsi(corso.tipologia)}</span>
-                <h3 class="corso-ledwall-titolo">${escapeHtmlCorsi(corso.nome)}</h3>
+                <span class="corso-ledwall-tipologia" style="background: ${stileBadge.bg}; color: ${stileBadge.color}; border: 1px solid ${stileBadge.border};">${escapeHtmlCorsi(tipologiaTesto || 'Corso')}</span>
+                <h3 class="corso-ledwall-titolo">${escapeHtmlCorsi(corso.nome || corso.Nome || '')}</h3>
               </div>
               <div class="corso-ledwall-info">
                 <div class="info-row-lw">
                   <svg class="tabler-icon-lw" viewBox="0 0 24 24"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 7v5l3 3"/></svg>
-                  <span><strong>${escapeHtmlCorsi(corso.orario)}</strong></span>
+                  <span><strong>${escapeHtmlCorsi(corso.orario || corso.Orario || '')}</strong></span>
                 </div>
                 <div class="info-row-lw">
                   <svg class="tabler-icon-lw" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></svg>
-                  <span>Inizio: <strong>${escapeHtmlCorsi(corso.dataInizio)}</strong></span>
+                  <span>Inizio: <strong>${escapeHtmlCorsi(corso.dataInizio || corso.DataInizio || '')}</strong></span>
                 </div>
               </div>
             </div>

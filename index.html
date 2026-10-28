@@ -209,14 +209,11 @@
     }
     #ledwall-wrapper-container .corso-ledwall-tipologia {
       display: inline-block;
-      background: #fffbe6;
-      color: #946c00;
       font-size: 0.7rem;
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 4px;
       text-transform: uppercase;
-      border: 1px solid #fde68a;
       margin-bottom: 6px;
     }
     #ledwall-wrapper-container .corso-ledwall-titolo {
@@ -663,6 +660,22 @@
         return "Variabile";
       }
 
+      function getColoreTipologia(tipologia) {
+        var t = (tipologia || "").toLowerCase().trim();
+        if (t.indexOf("principiant") !== -1 || t.indexOf("base") !== -1) {
+          return { bg: "#e0f2fe", color: "#0369a1", border: "#bae6fd" }; // Azzurro
+        } else if (t.indexOf("avanzat") !== -1 || t.indexOf("pro") !== -1) {
+          return { bg: "#fee2e2", color: "#991b1b", border: "#fecaca" }; // Rosso
+        } else if (t.indexOf("boulder") !== -1) {
+          return { bg: "#f3e8ff", color: "#6b21a8", border: "#e9d5ff" }; // Viola
+        } else if (t.indexOf("lead") !== -1 || t.indexOf("corda") !== -1) {
+          return { bg: "#dcfce7", color: "#166534", border: "#bbf7d0" }; // Verde
+        } else if (t.indexOf("bambin") !== -1 || t.indexOf("junior") !== -1) {
+          return { bg: "#ffedd5", color: "#9a3412", border: "#fed7aa" }; // Arancione
+        }
+        return { bg: "#fffbe6", color: "#946c00", border: "#fde68a" }; // Default Giallo
+      }
+
       function caricaCorsiArrampicata(containerId, corsiDataGlobal) {
         var container = document.getElementById(containerId);
         if (!container) return;
@@ -674,10 +687,11 @@
 
         var html = '<div class="corsi-ledwall-grid">';
         corsiDataGlobal.forEach(function(corso) {
+          var stileBadge = getColoreTipologia(corso.tipologia);
           html += `
             <div class="corso-ledwall-card">
               <div>
-                <span class="corso-ledwall-tipologia">${escapeHtmlCorsi(corso.tipologia)}</span>
+                <span class="corso-ledwall-tipologia" style="background: ${stileBadge.bg}; color: ${stileBadge.color}; border: 1px solid ${stileBadge.border};">${escapeHtmlCorsi(corso.tipologia)}</span>
                 <h3 class="corso-ledwall-titolo">${escapeHtmlCorsi(corso.nome)}</h3>
               </div>
               <div class="corso-ledwall-info">

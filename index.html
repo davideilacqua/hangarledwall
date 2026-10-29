@@ -660,38 +660,43 @@
         return "Variabile";
       }
 
-      function getColoreTipologia(tipologia) {
-        var str = (tipologia || "").toLowerCase().trim();
+    function getColoreTipologia(tipologia) {
+        // Normalizziamo la stringa rimuovendo spazi multipli e rendendola minuscola per un confronto sicuro
+        var str = (tipologia || "").trim().replace(/\s+/g, ' ').toLowerCase();
 
         // 1. Corso Base 1° livello -> Giallo
-        if (str.indexOf("base 1") !== -1 || str.indexOf("base 1°") !== -1 || str.indexOf("base1") !== -1) {
+        if (str === "corso base 1° livello" || str === "corso base 1 livello" || str === "corso base 1") {
           return { bg: "#fef9c3", color: "#854d0e", border: "#fef08a" };
         }
+        
         // 2. Corso Base 2° livello -> Arancione
-        if (str.indexOf("base 2") !== -1 || str.indexOf("base 2°") !== -1 || str.indexOf("base2") !== -1) {
+        if (str === "corso base 2° livello" || str === "corso base 2 livello" || str === "corso base 2") {
           return { bg: "#ffedd5", color: "#9a3412", border: "#fed7aa" };
         }
+        
         // 3. Corso sicura 1° livello -> Verde
-        if (str.indexOf("sicura 1") !== -1 || str.indexOf("sicura 1°") !== -1 || str.indexOf("sicura1") !== -1) {
+        if (str === "corso sicura 1° livello" || str === "corso sicura 1 livello" || str === "corso sicura 1") {
           return { bg: "#dcfce7", color: "#166534", border: "#bbf7d0" };
         }
+        
         // 4. Corso sicura 2° livello -> Rosso
-        if (str.indexOf("sicura 2") !== -1 || str.indexOf("sicura 2°") !== -1 || str.indexOf("sicura2") !== -1) {
+        if (str === "corso sicura 2° livello" || str === "corso sicura 2 livello" || str === "corso sicura 2") {
           return { bg: "#fee2e2", color: "#991b1b", border: "#fecaca" };
         }
+        
         // 5. Allenamento guidato -> Azzurro
-        if (str.indexOf("allenamento guidato") !== -1 || str.indexOf("allenamento") !== -1) {
+        if (str === "allenamento guidato") {
           return { bg: "#e0f2fe", color: "#0369a1", border: "#bae6fd" };
         }
+        
         // 6. Corso outdoor -> Marrone
-        if (str.indexOf("outdoor") !== -1) {
+        if (str === "corso outdoor") {
           return { bg: "#fef3c7", color: "#78350f", border: "#fde68a" };
         }
 
-        // DEFAULT: Giallo
+        // DEFAULT: Giallo (per qualsiasi altra cosa o se vuoto)
         return { bg: "#fef9c3", color: "#854d0e", border: "#fef08a" };
       }
-
       function caricaCorsiArrampicata(containerId, corsiDataGlobal) {
         var container = document.getElementById(containerId);
         if (!container) return;

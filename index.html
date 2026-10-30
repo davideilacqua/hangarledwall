@@ -697,6 +697,25 @@
         // DEFAULT: Giallo (per qualsiasi altra cosa o se vuoto)
         return { bg: "#fef9c3", color: "#854d0e", border: "#fef08a" };
       }
+
+function parseDataInizio(dataStr) {
+        if (!dataStr) return 0;
+        dataStr = String(dataStr).trim();
+        // Supporta formati comuni come DD/MM/YYYY o YYYY-MM-DD
+        var parts = dataStr.split(/[\/\-]/);
+        if (parts.length === 3) {
+          if (parts[2].length === 4) {
+            // Formato DD/MM/YYYY
+            return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
+          } else if (parts[0].length === 4) {
+            // Formato YYYY/MM/DD o YYYY-MM-DD
+            return new Date(parts[0], parts[1] - 1, parts[2]).getTime();
+          }
+        }
+        var parsed = Date.parse(dataStr);
+        return isNaN(parsed) ? 0 : parsed;
+      }
+      
       function caricaCorsiArrampicata(containerId, corsiDataGlobal) {
         var container = document.getElementById(containerId);
         if (!container) return;
@@ -706,8 +725,15 @@
           return;
         }
 
+        // Creiamo una copia dei dati e li ordiniamo dalla data più recente alla più vecchia
+        var corsiOrdinati = corsiDataGlobal.slice().sort(function(a, b) {
+          var dataA = parseDataInizio(a.dataInizio || a.DataInizio || '');
+          var dataB = parseDataInizio(b.dataInizio || b.DataInizio || '');
+          return dataB - dataA; // Ordine discendente (più recente prima)
+        });
+
         var html = '<div class="corsi-ledwall-grid">';
-        corsiDataGlobal.forEach(function(corso) {
+        corsiOrdinati.forEach(function(corso) {
           var tipologiaTesto = corso.tipologia || corso.Tipologia || corso.tipo || corso.Tipo || corso.categoria || "";
           var stileBadge = getColoreTipologia(tipologiaTesto);
 
